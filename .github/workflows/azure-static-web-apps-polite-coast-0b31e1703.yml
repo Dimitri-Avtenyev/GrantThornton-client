@@ -33,8 +33,6 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
-        env: 
-          REACT_APP_URL_SERVER_PROD: ${{ secrets.REACT_APP_URL_SERVER_PROD }}
           ###### End of Repository/Build Configurations ######
       
 
