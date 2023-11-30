@@ -78,7 +78,8 @@ const UploadArea = () => {
         try {
             //setLoading (true); //loading start
             const ENDPOINT = process.env.NODE_ENV === "production" ? 
-            `${process.env.REACT_APP_URL_SERVER_PROD}/uploadfile`: 
+            `https://grantthornton-server.azurewebsites.net/uploadfile`: 
+            // `${process.env.REACT_APP_URL_SERVER_PROD}/uploadfile`: 
             `${process.env.REACT_APP_URL_SERVER_LOCAL}/uploadfile`;
             
             const response = await fetch(ENDPOINT, {
