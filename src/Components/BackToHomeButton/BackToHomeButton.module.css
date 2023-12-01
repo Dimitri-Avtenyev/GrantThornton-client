@@ -1,0 +1,21 @@
+.backToHomeButton {
+    text-decoration: none;
+    margin-top: 50px;
+    width: 100px;
+    align-self: center;
+    background-color: rgb(74, 29, 154);
+}
+.backToHomeButton:hover{
+    text-decoration: none;
+    background-color: rgb(74, 29, 154);
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.text {
+    color: white;
+    text-decoration: none;
+    padding-top: 2px;
+}
+.icon{
+    color: white;
+    vertical-align: middle;
+}
