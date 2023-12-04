@@ -33,10 +33,6 @@
     background-color: rgb(88,86,214);
 }
 
-.listContainer {
-    overflow: auto;
-}
-
 .articleIcon {
     color: rgb(31,112,68);
 }
@@ -56,6 +52,7 @@
 .errorMessage {
     margin-left: 10px;
     color: rgb(159, 6, 6);
+    font-weight: bold;
 }
 
 .fileCountTextContainer {
