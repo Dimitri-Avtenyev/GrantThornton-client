@@ -16,11 +16,6 @@ import Box from "@mui/material/Box";
 import WelcomeText from '../WelcomeText/WelcomeText';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 import BackToHomeButton from '../BackToHomeButton/BackToHomeButton';
-import HandlerModal from '../Modal/Modal';
-
-
-
-
 
 const cache = createCache({
     key: "css",
@@ -70,7 +65,7 @@ const UploadArea = () => {
         // hier is ineens een "guideline" voor file als response
          // -> ---------------- receive file as res --------------------- <-
         try {
-            //setLoading (true); 
+            setLoading (true);
             const ENDPOINT = process.env.NODE_ENV === "production" ? 
             `${process.env.REACT_APP_URL_SERVER_PROD}/uploadfile`: 
             `${process.env.REACT_APP_URL_SERVER_LOCAL}/uploadfile`;
@@ -122,9 +117,12 @@ const UploadArea = () => {
                 alignItems="center"
                 sx={boxDefault}
                 >
-                    {showError && <p>test</p>}
                     {loading &&  <LoadingIndicator></LoadingIndicator>}
+                    {showError ? <p className={styles.errorMessage}>Er is iets fout gegaan. Hernieuw de pagina en probeer opnieuw.</p>
+                    :
                     <Button variant="contained" type="submit" className={styles.convertButton} onClick={handleLoading} disabled={!files.length}>Convert</Button>
+                    }
+                    
                 </Box>
             </form>
             
@@ -147,11 +145,11 @@ const UploadArea = () => {
         :                    
         <div className={styles.downloadArea}>
             <div className={styles.fileCountTextContainer}>
-                <p>Download je bestand!</p>
+                <p>Onbekende valuta's zijn geconverteerd. <br /> Download je bestand hieronder!</p>
             </div>
-            <Button href={downloadlink} component={Link} download={files} variant="contained" className={styles.downloadButton}>
+            <Button href={downloadlink} component={Link} variant="contained" download="convertedFile.xlsx" className={styles.downloadButton}>
                 <DownloadIcon></DownloadIcon>
-            Onbekende valuta's zijn geconverteerd. Download je bestand hieronder!
+            Download bestand
             </Button>
             <BackToHomeButton></BackToHomeButton>
         </div>
