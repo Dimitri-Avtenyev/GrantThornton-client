@@ -38,17 +38,15 @@ const UploadArea = () => {
 
     const onDrop = useCallback((acceptedFiles : File[], rejectedFiles : FileRejection[]) => {
         if(acceptedFiles.length) {
-            setFiles(previousFiles => [
-                ...previousFiles,
-                ...acceptedFiles
-            ])
+            setFiles(acceptedFiles)
         }
 
-        if(rejectedFiles.length) {
-            setRejected(previousFiles => [...previousFiles, ...rejectedFiles])
+        if(rejectedFiles) {
+            setRejected(rejectedFiles)
         }
     }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, maxFiles:1, accept: {
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, maxFiles: 1, multiple: false, accept: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"]
     }})
 
@@ -56,19 +54,15 @@ const UploadArea = () => {
         setFiles(files => files.filter(file => file.name !== name));
     }
 
-    // ----- CODE TO REMOVE REJECTED FILES -----
-    // const removeRejected = (name : string) => {
-    //     setRejected(files => files.filter(({file}) => file.name !== name));
-    // }
     const handleLoading = ()=>{
         setLoading(true);
     }
+
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
         if(!files.length) return;
         
-
         const formData = new FormData();
         files.forEach(file => formData.append("file", file));
 
@@ -76,7 +70,7 @@ const UploadArea = () => {
         // hier is ineens een "guideline" voor file als response
          // -> ---------------- receive file as res --------------------- <-
         try {
-            //setLoading (true); //loading start
+            //setLoading (true); 
             const ENDPOINT = process.env.NODE_ENV === "production" ? 
             `${process.env.REACT_APP_URL_SERVER_PROD}/uploadfile`: 
             `${process.env.REACT_APP_URL_SERVER_LOCAL}/uploadfile`;
@@ -95,9 +89,8 @@ const UploadArea = () => {
             console.log(err);
             setShowError(true);
         }finally {
-            setLoading (false); // na het laden afzetten
+            setLoading (false); 
         }
-        // -> ---------------- receive file as res --------------------- <- 
     }
 
     const boxDefault = {
@@ -107,6 +100,8 @@ const UploadArea = () => {
     return (
     <>
         <CacheProvider value={cache}>
+        {/*----START UPLOAD SECTION----*/}
+
         {!requestSucces ?
         <div className={styles.uploadArea}>
             <WelcomeText/>
@@ -133,46 +128,36 @@ const UploadArea = () => {
                 </Box>
             </form>
             
-            <div className={styles.listContainer}>
+            <div>
                 <List className={styles.fileList}>
                     {files.map((file) => (
                         <ListItem className={styles.listItem} key={file.name}>
                             <ArticleIcon className={styles.articleIcon}></ArticleIcon>
                             <ListItemText className={styles.listItemText}>{file.name}</ListItemText>
-                            <DeleteIcon className={styles.deleteIcon} onClick={() => removeFile(file.name)}>X</DeleteIcon>
+                            <DeleteIcon className={styles.deleteIcon} onClick={() => removeFile(file.name)}></DeleteIcon>
                         </ListItem>
                     ))}
+                    {rejected.length > 1 ? <p className={styles.errorMessage}>Je kan maar één bestand tegelijkertijd uploaden</p> : null} 
                 </List>
-
-             <List> 
-                    {rejected.map(({file, errors}) => (
-                        <ListItem key={file.name}>
-                            <ListItemText>{file.name}</ListItemText>
-                            <List>
-                                {errors.map(error => (
-                                    <ListItemText className={styles.errorMessage} key={error.code}>Bestand moet een Excel bestand zijn!</ListItemText>
-                            ))}
-                            </List>
-                        </ListItem>
-                    ))}
-            </List> 
+                 
             </div> 
         </div>
-        :                        
+        /*----START DOWNLOAD SECTION----*/
+
+        :                    
         <div className={styles.downloadArea}>
             <div className={styles.fileCountTextContainer}>
                 <p>Download je bestand!</p>
             </div>
-            <Button href={downloadlink} component={Link} download={"demoProcessedFile.xlsx"} variant="contained" className={styles.downloadButton}>
+            <Button href={downloadlink} component={Link} download={files} variant="contained" className={styles.downloadButton}>
                 <DownloadIcon></DownloadIcon>
-            Download bestand
+            Onbekende valuta's zijn geconverteerd. Download je bestand hieronder!
             </Button>
             <BackToHomeButton></BackToHomeButton>
         </div>
         }
         </CacheProvider>
     </>
-        
     )
 }
 
